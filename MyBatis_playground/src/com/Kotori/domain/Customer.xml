@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Kotori.mapper.CustomerMapper">
+
+    <select id="queryCustomerById" parameterType="Int" resultType="com.Kotori.domain.Customer">
+	  SELECT * FROM `customer` WHERE cust_id  = #{cust_id};
+	</select>
+
+    <select id="queryAllCustomer" resultType="com.Kotori.domain.Customer">
+	  SELECT * FROM `customer`;
+	</select>
+
+    <select id="vagueQueryByName" parameterType="String" resultType="com.Kotori.domain.Customer">
+	  SELECT * FROM `customer` where cust_name like '%${value}%';
+	</select>
+
+    <insert id="insertCustomer" parameterType="com.Kotori.domain.Customer">
+        /* 获取最后一个id */
+        <selectKey keyColumn="cust_id" keyProperty="cust_id" resultType="Integer" order="AFTER">
+            select last_insert_id
+        </selectKey>
+	  INSERT INTO `customer` (cust_name, cust_profession, cust_phone, email)
+	  VALUES (#{cust_name},#{cust_profession},#{cust_phone},#{email})
+	</insert>
+
+    <update id="updateCustomer" parameterType="com.Kotori.domain.Customer">
+        UPDATE `customer` SET cust_name = #{cust_name}, cust_phone = #{cust_phone} WHERE cust_id=#{cust_id};
+    </update>
+
+    <delete id="deleteCustomer" parameterType="com.Kotori.domain.Customer">
+        DELETE FROM `customer` WHERE cust_id=#{cust_id};
+    </delete>
+
+
+</mapper>
