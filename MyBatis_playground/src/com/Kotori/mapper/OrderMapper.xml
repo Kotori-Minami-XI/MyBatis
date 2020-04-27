@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Kotori.mapper.OrderMapper">
+
+    <!--级联查询时需要手动配置map-->
+	<resultMap id="orderResultMap1" type="com.Kotori.domain.Order">
+		<id property="order_id" column="order_id"></id> <!--id指明主键-->
+		<result property="order_name" column="order_name"></result>
+		<result property="order_num" column="order_num"></result>
+		<result property="customer.cust_id" column="cust_id"></result>
+		<result property="customer.cust_phone" column="cust_phone"></result>
+		<result property="customer.cust_name" column="cust_name"></result>
+		<result property="customer.email" column="email"></result>
+		<result property="customer.cust_profession" column="cust_profession"></result>
+	</resultMap>
+	<!--级联查询时另外一种配置map， 推荐使用这种,因为可以分布查询-->
+	<resultMap id="orderResultMap2" type="com.Kotori.domain.Order">
+		<id property="order_id" column="order_id"></id> <!--id指明主键-->
+		<result property="order_name" column="order_name"></result>
+		<result property="order_num" column="order_num"></result>
+		<association property="customer" javaType="com.Kotori.domain.Customer">
+			<result property="cust_id" column="cust_id"></result>
+			<result property="cust_phone" column="cust_phone"></result>
+			<result property="cust_name" column="cust_name"></result>
+			<result property="email" column="email"></result>
+			<result property="cust_profession" column="cust_profession"></result>
+		</association>
+	</resultMap>
+
+	<select id="leftJoinQuery" resultMap="orderResultMap2">
+		SELECT * FROM `order` as o LEFT JOIN `customer` as c ON o.cust_id = c.cust_id;
+	</select>
+
+	<!--分步查询：先查一条sql，用这结果在另一条sql里面查询-->
+	<resultMap id="orderResultMap3" type="com.Kotori.domain.Order">
+		<id property="order_id" column="order_id"></id> <!--id指明主键-->
+		<result property="order_name" column="order_name"></result>
+		<result property="order_num" column="order_num"></result>
+		<association property="customer" javaType="com.Kotori.domain.Customer"
+					 select="com.Kotori.mapper.CustomerMapper.getCustomerWithId" column="cust_id">
+		</association>
+	</resultMap>
+	<select id="getOrderWithOrderId" parameterType="Integer" resultMap="orderResultMap3">
+		SELECT * FROM `order` WHERE order_id = #{id};
+	</select>
+
+	<select id="getOrderWithCustId" parameterType="Integer" resultType="com.Kotori.domain.Order">
+		SELECT * FROM `order` WHERE cust_id = #{id};
+	</select>
+
+    <!--useGeneratedKeys:生成order的时候会拿到order的id并放在order对象中-->
+	<insert id="insertOrder" parameterType="com.Kotori.domain.Order"
+			useGeneratedKeys="true" keyProperty="order_id" keyColumn="order_id">
+		INSERT INTO `order` (order_name, order_num, cust_id)
+		VALUES (#{order_name},#{order_num},#{cust_id});
+	</insert>
+
+	<delete id="deleteAllOrder">
+		DELETE FROM `order`
+	</delete>
+
+	<update id="updateCustId">
+		UPDATE `order` SET cust_id = #{custId} WHERE order_id = #{orderId};
+	</update>
+
+	<update id="updateRelationCustomer">
+		UPDATE `order` SET cust_id = null WHERE cust_id = #{custId};
+	</update>
+
+
+</mapper>

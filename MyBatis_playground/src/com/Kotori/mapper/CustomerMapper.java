@@ -13,7 +13,11 @@ import java.util.List;
  */
 public interface CustomerMapper {
     public Customer queryCustomerById(Integer id);
-    public List<Customer> queryAllCustomer(Integer id);
+    public List<Customer> queryAllCustomer(); //一步查询所有客户
+    public List<Customer> queryAllCustomerByStep(); //分步查询所有客户
     public void insertCustomer(Customer customer);
     public void updateCustomer(Customer customer);
+    public Customer getCustomerWithId(Integer id);
+    public void deleteCustomer(Integer id);
+    public List<Customer> vagueQueryByName(String name);
 }

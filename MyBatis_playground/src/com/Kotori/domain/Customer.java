@@ -1,11 +1,22 @@
 package com.Kotori.domain;
 
+import java.util.List;
+
 public class Customer {
     private Integer cust_id;
     private String cust_name;
     private String cust_profession;
     private String cust_phone;
     private String email;
+    private List<Order> orders;
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     public Integer getCust_id() {
         return cust_id;
@@ -55,6 +66,7 @@ public class Customer {
                 ", cust_profession='" + cust_profession + '\'' +
                 ", cust_phone='" + cust_phone + '\'' +
                 ", email='" + email + '\'' +
+                ", orders=" + orders +
                 '}';
     }
 }

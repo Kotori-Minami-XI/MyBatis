@@ -1,9 +1,10 @@
 package com.Kotori.test;
 
+import com.Kotori.domain.Customer;
 import com.Kotori.domain.Order;
+import com.Kotori.mapper.CustomerMapper;
 import com.Kotori.mapper.OrderMapper;
 import com.Kotori.utils.MybatisUtils;
-import org.apache.ibatis.reflection.SystemMetaObject;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 
@@ -44,7 +45,26 @@ public class TestOrderMapper {
         }
         sqlSession.close();
     }
-    
+
+    @Test
+    public void testStepQuery() {
+        SqlSession sqlSession = MybatisUtils.openSession();
+        OrderMapper mapper = sqlSession.getMapper(OrderMapper.class);
+        Order order = mapper.getOrderWithOrderId(206);
+        System.out.println(order);
+        sqlSession.close();
+    }
+
+    @Test
+    public void testUpdateCustId() {
+        SqlSession sqlSession = MybatisUtils.openSession();
+        OrderMapper mapper = sqlSession.getMapper(OrderMapper.class);
+        mapper.updateCustId(206,2);
+        sqlSession.commit();
+        sqlSession.close();
+    }
+
+
     public Order randomGenerateOrder(Integer index, Integer maxCustId) {
         Random random = new Random();
 

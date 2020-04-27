@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Kotori.mapper.TeacherMapper">
+
+	<resultMap id="teacherResultMap1" type="com.Kotori.domain.Teacher">
+		<id property="teacher_id" column="teacher_id"></id>
+		<result property="teacher_name" column="teacher_name"></result>
+		<collection property="students" javaType="List" ofType="com.Kotori.domain.Student">
+			<id property="student_id" column="student_id"></id>
+			<result property="student_name" column="student_name"></result>
+		</collection>
+	</resultMap>
+	<select id="getAllTeacher" resultMap="teacherResultMap1">
+		SELECT * FROM `teacher` AS t
+		LEFT JOIN `student_teacher_rel` AS rel ON t.teacher_id = rel.teacher_id
+		LEFT JOIN `student` AS s ON s.student_id = rel.student_id;
+	</select>
+
+    <!--分步查询-->
+	<resultMap id="teacherResultMap2" type="com.Kotori.domain.Teacher">
+		<id property="teacher_id" column="teacher_id"></id>
+		<result property="teacher_name" column="teacher_name"></result>
+		<collection property="students" javaType="List" ofType="com.Kotori.domain.Student"
+					select="com.Kotori.mapper.StudentMapper.getStudentByTeacherId" column="teacher_id">
+			<id property="student_id" column="student_id"></id>
+			<result property="student_name" column="student_name"></result>
+		</collection>
+	</resultMap>
+	<select id="getTeacherWithId" resultMap="teacherResultMap2">
+		SELECT * FROM `teacher` WHERE teacher_id = #{teacher_id};
+	</select>
+
+</mapper>

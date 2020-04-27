@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Kotori.mapper.CustomerMapper">
+
+    <select id="queryCustomerById" parameterType="Int" resultType="com.Kotori.domain.Customer">
+	  SELECT * FROM `customer` WHERE cust_id  = #{cust_id};
+	</select>
+
+    <resultMap id="customerResultMap1" type="com.Kotori.domain.Customer">
+        <id property="cust_id" column="cust_id"></id>
+        <result property="cust_name" column="cust_name"></result>
+        <result property="cust_profession" column="cust_profession"></result>
+        <result property="cust_phone" column="cust_phone"></result>
+        <result property="email" column="email"></result>
+        <!--多个对象使用collection，单个对象使用association-->
+        <collection property="orders" ofType="com.Kotori.domain.Order">
+            <result property="order_id" column="order_id"></result>
+            <result property="order_name" column="order_name"></result>
+            <result property="order_num" column="order_num"></result>
+        </collection>
+    </resultMap>
+    <select id="queryAllCustomer" resultMap="customerResultMap1">
+	  SELECT * FROM `customer` AS c LEFT JOIN `order` AS o ON c.cust_id = o.cust_id;
+	</select>
+
+    <resultMap id="customerResultMap2" type="com.Kotori.domain.Customer">
+        <id property="cust_id" column="cust_id"></id>
+        <result property="cust_name" column="cust_name"></result>
+        <result property="cust_profession" column="cust_profession"></result>
+        <result property="cust_phone" column="cust_phone"></result>
+        <result property="email" column="email"></result>
+        <!--多个对象使用collection，单个对象使用association-->
+        <collection property="orders" javaType="List" ofType="com.Kotori.domain.Order"
+                    select="com.Kotori.mapper.OrderMapper.getOrderWithCustId" column="cust_id">
+        </collection>
+    </resultMap>
+    <select id="queryAllCustomerByStep" resultMap="customerResultMap2">
+        SELECT * FROM `customer`;
+    </select>
+
+    <select id="vagueQueryByName" parameterType="String" resultType="com.Kotori.domain.Customer">
+	  SELECT * FROM `customer` where cust_name like '%${value}%';
+	</select>
+
+    <select id="getCustomerWithId" parameterType="Integer" resultType="com.Kotori.domain.Customer">
+        SELECT * FROM `customer` WHERE cust_id = #{id};
+    </select>
+
+    <insert id="insertCustomer" parameterType="com.Kotori.domain.Customer"
+            useGeneratedKeys="true" keyProperty="cust_id" keyColumn="cust_id">
+	  INSERT INTO `customer` (cust_name, cust_profession, cust_phone, email)
+	  VALUES (#{cust_name},#{cust_profession},#{cust_phone},#{email})
+	</insert>
+
+    <update id="updateCustomer" parameterType="com.Kotori.domain.Customer">
+        UPDATE `customer` SET cust_name = #{cust_name}, cust_phone = #{cust_phone} WHERE cust_id=#{cust_id};
+    </update>
+
+    <delete id="deleteCustomer" parameterType="com.Kotori.domain.Customer">
+        DELETE FROM `customer` WHERE cust_id=#{id};
+    </delete>
+
+</mapper>

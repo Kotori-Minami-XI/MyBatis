@@ -5,6 +5,15 @@ public class Order {
     private String order_name;
     private String order_num;
     private Integer cust_id;
+    private Customer customer;
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
 
     public Integer getOrder_id() {
         return order_id;
@@ -45,6 +54,7 @@ public class Order {
                 ", order_name='" + order_name + '\'' +
                 ", order_num='" + order_num + '\'' +
                 ", cust_id=" + cust_id +
+                ", customer=" + customer +
                 '}';
     }
 }
