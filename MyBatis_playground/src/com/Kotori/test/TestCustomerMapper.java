@@ -6,7 +6,7 @@ import com.Kotori.utils.MybatisUtils;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.Test;
 
-public class TestMapper {
+public class TestCustomerMapper {
     @Test
     public void test1() {
         SqlSession sqlSession = MybatisUtils.openSession();

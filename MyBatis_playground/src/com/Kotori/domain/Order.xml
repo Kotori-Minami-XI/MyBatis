@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Kotori.mapper.OrderMapper">
+
+	<insert id="insertOrder" parameterType="com.Kotori.domain.Order">
+		INSERT INTO `order` (order_name, order_num, cust_id)
+		VALUES (#{order_name},#{order_num},#{cust_id});
+	</insert>
+
+	<delete id="deleteAllOrder">
+		DELETE FROM `order`
+	</delete>
+
+	<select id="leftJoinQuery" resultType="com.Kotori.domain.Order">
+		SELECT * FROM `order` as o LEFT JOIN `customer` as c ON o.cust_id = c.cust_id;
+	</select>
+
+</mapper>

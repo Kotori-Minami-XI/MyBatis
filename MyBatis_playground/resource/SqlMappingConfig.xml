@@ -28,6 +28,7 @@
     <!--加载映射文件-->
     <mappers>
         <mapper resource="com/Kotori/domain/Customer.xml"></mapper>
+        <mapper resource="com/Kotori/domain/Order.xml"></mapper>
     </mappers>
 
 </configuration>
